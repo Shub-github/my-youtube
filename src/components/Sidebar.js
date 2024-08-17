@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { FaMusic } from "react-icons/fa";
+import { GoHome } from "react-icons/go";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
@@ -12,13 +12,13 @@ const Sidebar = () => {
   return (
     <div className="col-span-1 px-3">
       <h1 className="font-bold">Subscription</h1>
-      <ul>
-        <Link to={"/"}>Home</Link>
-        <li>
-          <FaMusic />
-        </li>
-        <li>gaming</li>
-        <li>movie</li>
+      <ul className="flex flex-col">
+        <Link to={"/"}>
+          <GoHome />
+          Home
+        </Link>
+        <Link to={"/"}>Shorts</Link>
+        <Link to={"/"}>Subscription</Link>
       </ul>
 
       <h1 className="font-bold pt-4">Watch Later</h1>
