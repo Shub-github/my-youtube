@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 import { YOUTUBE_SEARCH_API } from "../utils/constant";
+import { cacheResult } from "../utils/searchSlice";
 
 const Head = () => {
+  /**
+   *  searchCache = {
+   *     "iphone": ["iphone 11", "iphone 14"]
+   *  }
+   *  searchQuery = iphone
+   */
+  const searchCache = useSelector((store) => store.search);
+
   const dispatch = useDispatch();
 
   const toggleMenuHandler = () => {
@@ -19,7 +28,11 @@ const Head = () => {
     // console.log(searchQuery);
     // call the api after 2 milisecond
     const timer = setTimeout(() => {
-      getSearchSuggestion();
+      if (searchCache[searchQuery]) {
+        setSuggestions(searchCache[searchQuery]);
+      } else {
+        getSearchSuggestion();
+      }
     }, 200);
 
     // if we call the api again within 2 millisecond then first unmount the existing api and then again set the timer of 2 millisecond
@@ -34,6 +47,12 @@ const Head = () => {
     const json = await data.json();
     setSuggestions(json[1]);
     // console.log(json);
+    // update the data in cache by dispatch()
+    dispatch(
+      cacheResult({
+        [searchQuery]: json[1],
+      })
+    );
   };
 
   return (
